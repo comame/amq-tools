@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アニソン検索</title>
+</head>
+
+<body>
+    <form>
+        <label>Anime Name: <input id="animeName" autofocus></label>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>アニメ名</th>
+                <th>Type</th>
+                <th>曲名</th>
+                <th>Prefix</th>
+                <th>ファイル名</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+    <style>
+        form {
+            margin-bottom: 2em;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-width: 1px 0px;
+            border-color: black;
+            border-style: solid;
+        }
+
+        thead tr {
+            border-bottom: solid 1px black;
+            border-width: 0 0 1px 0;
+        }
+
+        td,
+        th {
+            padding: .4rem;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #efefef;
+        }
+
+        th {
+            min-width: 6rem;
+        }
+
+    </style>
+    <script>
+        const animeNameInput = document.getElementById('animeName')
+        const tbody = document.getElementById('tbody')
+
+        document.forms[0].addEventListener('submit', (e) => {
+            e.preventDefault()
+        })
+
+        document.addEventListener('keydown', () => {
+            animeNameInput.focus()
+        })
+
+        let abortController = null
+        animeNameInput.addEventListener('keydown', async (e) => {
+            if (e.code != "Enter") {
+                return
+            }
+            abortController?.abort()
+
+            tbody.innerHTML = '<tr><td>Loading</td></tr>'
+
+            const animeName = animeNameInput.value
+
+            abortController = new AbortController()
+            const res = await fetch('/api/search/byAnimeName', {
+                method: 'POST',
+                body: JSON.stringify({
+                    animeName
+                }),
+                signal: abortController.signal
+            }).then(res => res.json())
+
+            const songs = res.values
+
+            songs.sort((a, b) => {
+                if (a.type < b.type) {
+                    return -1
+                } else if (a.type > b.type) {
+                    return 1
+                } else {
+                    return 0
+                }
+            })
+
+            songs.sort((a, b) => {
+                return a.animeId - b.animeId
+            })
+
+            tbody.innerHTML = ''
+
+            for (const song of songs) {
+                const rowHtml = `<tr>
+                    <td>${song.animeName.jp}</td>
+                    <td>${song.type}</td>
+                    <td>${song.name}</td>
+                    <td>${song.filename.slice(0, 2)}</td>
+                    <td>${song.filename}</td>
+                </tr>`
+                tbody.innerHTML += rowHtml
+            }
+        })
+    </script>
+</body>
+
+</html>

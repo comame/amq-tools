@@ -1,0 +1,4 @@
+github.com/comame/readenv-go v0.0.0-20230427165530-3eea8bda1468 h1:xvVv56Ap5WuCvPr68AIhkLi1imyLAPL0+JRQ5cbMW/w=
+github.com/comame/readenv-go v0.0.0-20230427165530-3eea8bda1468/go.mod h1:+YyWGrxgTS9LYUUTREDlTKT6WG2755SzUA9331pSK8M=
+github.com/mattn/go-sqlite3 v1.14.16 h1:yOQRA0RpS5PFz/oikGwBEqvAWhWg5ufRz4ETLjwpU1Y=
+github.com/mattn/go-sqlite3 v1.14.16/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
