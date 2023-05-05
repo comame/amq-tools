@@ -19,7 +19,7 @@ type env struct {
 
 var CATBOX_HOST = "https://files.catbox.moe"
 
-func Main() {
+func main() {
 	var env env
 	readenv.Read(&env)
 
